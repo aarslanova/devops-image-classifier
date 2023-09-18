@@ -29,3 +29,23 @@ USER appuser
 COPY ./tests/ /app/tests/
 
 CMD ["pytest"]
+
+# Main image
+
+FROM fallback_base AS main_base
+
+COPY vit_l_16_lc_swag-4d563306.pth /app/
+
+CMD [ "gunicorn", "-k", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8000", "--log-level", "info", "main:app" ]
+
+# Tests for main 
+
+FROM main_base AS main_base_test
+
+USER root
+RUN pip install --no-cache-dir pytest httpx
+USER appuser
+
+COPY ./tests/ /app/tests/
+
+CMD ["pytest"]
