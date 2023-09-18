@@ -44,7 +44,7 @@ jobs:
                 docker build --target main_base_test -t ${{ secrets.DOCKERHUB_USERNAME }}/main_base_test:latest .
             - name: Run Docker image for tests of the main
               run: |
-                docker run --rm -e PYTHONPATH=/app -e MODEL_NAME=wide_resnet ${{ secrets.DOCKERHUB_USERNAME }}/main_base_test:latest
+                docker run --rm -e PYTHONPATH=/app -e MODEL_NAME=wide_resnet50_2 ${{ secrets.DOCKERHUB_USERNAME }}/main_base_test:latest
             - name: Build and push image of the main on success
               run: |
                 docker build --target main_base -t ${{ secrets.DOCKERHUB_USERNAME }}/main_base:latest .
