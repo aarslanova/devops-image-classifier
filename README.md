@@ -16,6 +16,19 @@ With the integration of Kubernetes and the Nginx Ingress Controller, traffic is 
 
 All Docker images undergo a build, test, and publish cycle on DockerHub, facilitated by GitHub Workflows.
 
+# How to start the project?
+
+Requirements:
+
+- Installed kubectl
+- Install minikube
+
+1. `git clone https://github.com/aarslanova/devops-image-classifier.git`
+2. `minikube start --memory=11900 --cpus=5 --driver=docker` to start minikube with necessary memory and cpu
+3. `minikube addons enable ingress` to enable Ingress Controller
+4. `kubectl apply -f k8s/main-deployment.yml -f k8s/main-service.yml -f k8s/fallback-deployment.yml -f k8s/fallback-service.yml -f k8s/main-fallback-ingress.yml` to declaratively specify Kubernetes deployment, service, and ingress controller
+5. `kubectl get svc --all-namespaces | grep ingress` to get services and their namespaces of the ingress controller
+6. `minikube service ingress-nginx-controller -n ingress-nginx --url` to get links of the ingress controller
 # Credits
 
 For testing I use several media files:

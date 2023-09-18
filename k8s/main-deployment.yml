@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: main-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: main-base
+  template:
+    metadata:
+      labels:
+        app: main-base
+    spec:
+      containers:
+        - name: main-base
+          image: ararslanova/main_base:latest
+          env:
+            - name: MODEL_NAME
+              value: "wide_resnet50_2"
+          resources:
+            limits:
+              memory: "4.5Gi"
+              cpu: "2"

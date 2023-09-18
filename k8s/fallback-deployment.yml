@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fallback-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fallback-base
+  template:
+    metadata:
+      labels:
+        app: fallback-base
+    spec:
+      containers:
+        - name: fallback-base
+          image: ararslanova/fallback_base:latest
+          env:
+            - name: MODEL_NAME
+              value: "mobilenet_v3_large"
+          resources:
+            limits:
+              memory: "3.5Gi"
+              cpu: "2"

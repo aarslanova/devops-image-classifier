@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: main-fallback-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: '180'
+    nginx.ingress.kubernetes.io/proxy-send-timeout: '180'
+    nginx.ingress.kubernetes.io/proxy-read-timeout: '180'
+    nginx.ingress.kubernetes.io/proxy-next-upstream-timeout: '180'
+    nginx.ingress.kubernetes.io/custom-http-errors: '500'
+    nginx.ingress.kubernetes.io/default-backend: fallback-service:80
+    nginx.ingress.kubernetes.io/proxy-body-size: 8m
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /classify
+        pathType: Prefix
+        backend:
+          service:
+            name: main-service
+            port:
+              number: 80
+      
