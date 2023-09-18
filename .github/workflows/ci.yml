@@ -18,8 +18,8 @@ jobs:
             - name: Get models
               if: steps.cache-models.outputs.cache-hit != 'true'
               run: |
-                curl https://download.pytorch.org/models/mobilenet_v3_large-5c1a4163.pth
-                curl https://download.pytorch.org/models/vit_l_16_lc_swag-4d563306.pth
+                curl https://download.pytorch.org/models/mobilenet_v3_large-5c1a4163.pth -o mobilenet_v3_large-5c1a4163.pth
+                curl https://download.pytorch.org/models/vit_l_16_lc_swag-4d563306.pth -o vit_l_16_lc_swag-4d563306.pth
             - name: Setup QEMU
               uses: docker/setup-qemu-action@v3
             - name: Set up Docker Buildx
