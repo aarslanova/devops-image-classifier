@@ -30,38 +30,22 @@ jobs:
                 username: ${{ secrets.DOCKERHUB_USERNAME }}
                 password: ${{ secrets.DOCKERHUB_TOKEN }}
             - name: Build Docker image for tests of the fallback
-              uses: docker/build-push-action@v5
-              with:
-                context: .
-                load: true
-                target: fallback_base_test
-                tags: ${{ secrets.DOCKERHUB_USERNAME }}/fallback_base_test:latest
+              run: |
+                docker build --target fallback_base_test -t ${{ secrets.DOCKERHUB_USERNAME }}/fallback_base_test:latest .
             - name: Run Docker image for tests of the fallback
               run: |
                 docker run --rm -e PYTHONPATH=/app -e MODEL_NAME=mobilenet_v3_large ${{ secrets.DOCKERHUB_USERNAME }}/fallback_base_test:latest
             - name: Build and push image of the fallback on success
-              uses: docker/build-push-action@v5
-              with:
-                context: .
-                platforms: linux/amd64,linux/arm64
-                push: true
-                target: fallback_base
-                tags: ${{ secrets.DOCKERHUB_USERNAME }}/fallback_base:latest
+              run: |
+                docker build --target fallback_base_test -t ${{ secrets.DOCKERHUB_USERNAME }}/fallback_base_test:latest .
+                docker push ${{ secrets.DOCKERHUB_USERNAME }}/fallback_base:latest
             - name: Build Docker image for tests of the main
-              uses: docker/build-push-action@v5
-              with:
-                context: .
-                load: true
-                target: main_base_test
-                tags: ${{ secrets.DOCKERHUB_USERNAME }}/main_base_test:latest
+              run: |
+                docker build --target main_base_test -t ${{ secrets.DOCKERHUB_USERNAME }}/main_base_test:latest .
             - name: Run Docker image for tests of the main
               run: |
                 docker run --rm -e PYTHONPATH=/app -e MODEL_NAME=vit_l_16 ${{ secrets.DOCKERHUB_USERNAME }}/main_base_test:latest
             - name: Build and push image of the main on success
-              uses: docker/build-push-action@v5
-              with:
-                context: .
-                platforms: linux/amd64,linux/arm64
-                push: true
-                target: main_base
-                tags: ${{ secrets.DOCKERHUB_USERNAME }}/main_base:latest
+              run: |
+                docker build --target main_base -t ${{ secrets.DOCKERHUB_USERNAME }}/main_base:latest .
+                docker push ${{ secrets.DOCKERHUB_USERNAME }}/main_base:latest
