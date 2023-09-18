@@ -28,7 +28,7 @@ from utils import setup_model
 # Constants
 MODEL_NAME = os.getenv("MODEL_NAME", default="vit_l_16")
 FALLBACK_NAME = Models.get_fallback_model()
-BASE_DIR = Path(os.getenv("BASE_DIR", default="./"))
+BASE_DIR = Path(__file__).parent.absolute()
 CATEGORIES = get_categories()
 
 # Initialize FastAPI
