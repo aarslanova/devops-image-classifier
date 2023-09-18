@@ -13,13 +13,13 @@ jobs:
               with:
                 path: |
                   mobilenet_v3_large-5c1a4163.pth
-                  vit_l_16_lc_swag-4d563306.pth
+                  wide_resnet50_2-9ba9bcbe.pth
                 key: model-files-${{ runner.os }}
             - name: Get models
               if: steps.cache-models.outputs.cache-hit != 'true'
               run: |
                 curl https://download.pytorch.org/models/mobilenet_v3_large-5c1a4163.pth -o mobilenet_v3_large-5c1a4163.pth
-                curl https://download.pytorch.org/models/vit_l_16_lc_swag-4d563306.pth -o vit_l_16_lc_swag-4d563306.pth
+                curl https://download.pytorch.org/models/wide_resnet50_2-9ba9bcbe.pth -o wide_resnet50_2-9ba9bcbe.pth
             - name: Setup QEMU
               uses: docker/setup-qemu-action@v3
             - name: Set up Docker Buildx
@@ -44,7 +44,7 @@ jobs:
                 docker build --target main_base_test -t ${{ secrets.DOCKERHUB_USERNAME }}/main_base_test:latest .
             - name: Run Docker image for tests of the main
               run: |
-                docker run --rm -e PYTHONPATH=/app -e MODEL_NAME=vit_l_16 ${{ secrets.DOCKERHUB_USERNAME }}/main_base_test:latest
+                docker run --rm -e PYTHONPATH=/app -e MODEL_NAME=wide_resnet ${{ secrets.DOCKERHUB_USERNAME }}/main_base_test:latest
             - name: Build and push image of the main on success
               run: |
                 docker build --target main_base -t ${{ secrets.DOCKERHUB_USERNAME }}/main_base:latest .

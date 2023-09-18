@@ -34,7 +34,7 @@ CMD ["pytest"]
 
 FROM fallback_base AS main_base
 
-COPY vit_l_16_lc_swag-4d563306.pth /app/
+COPY wide_resnet50_2-9ba9bcbe.pth /app/
 
 CMD [ "gunicorn", "-k", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8000", "--log-level", "info", "main:app" ]
 
