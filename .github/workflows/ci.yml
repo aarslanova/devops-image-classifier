@@ -37,7 +37,7 @@ jobs:
                 docker run --rm -e PYTHONPATH=/app -e MODEL_NAME=mobilenet_v3_large ${{ secrets.DOCKERHUB_USERNAME }}/fallback_base_test:latest
             - name: Build and push image of the fallback on success
               run: |
-                docker build --target fallback_base_test -t ${{ secrets.DOCKERHUB_USERNAME }}/fallback_base_test:latest .
+                docker build --target fallback_base -t ${{ secrets.DOCKERHUB_USERNAME }}/fallback_base:latest .
                 docker push ${{ secrets.DOCKERHUB_USERNAME }}/fallback_base:latest
             - name: Build Docker image for tests of the main
               run: |
