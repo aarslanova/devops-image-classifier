@@ -38,7 +38,6 @@ app = FastAPI()
 main_model, main_transformations = setup_model(MODEL_NAME, BASE_DIR)
 
 # Fallback model setup only if it's different from the main model
-fallback_weights_path = None
 fallback_model = None
 fallback_transformations = None
 if MODEL_NAME != FALLBACK_NAME:
@@ -58,11 +57,17 @@ def classify_image(file: UploadFile = File(...)) -> dict[str, list[str]]:
                 main_model, main_transformations, img, CATEGORIES
             )
         }
-    except HTTPException:
-        if fallback_weights_path and fallback_model and fallback_transformations:
-            return {
-                "predictions": get_predictions_with_model(
-                    fallback_model, fallback_transformations, img, CATEGORIES
-                )
-            }
-        raise
+    except Exception as e:
+        print(f"Main model failed with error: {e}")
+        if fallback_model and fallback_transformations:
+            try:
+                return {
+                    "predictions": get_predictions_with_model(
+                        fallback_model, fallback_transformations, img, CATEGORIES
+                    )
+                }
+            except Exception as fallback_e:
+                # This is just for logging.
+                print(f"Fallback model also failed with error: {fallback_e}")
+                raise HTTPException(status_code=500, detail="Both main and fallback model failed.")
+        raise HTTPException(status_code=500, detail="Image classification failed.")

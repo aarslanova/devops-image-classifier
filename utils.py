@@ -90,7 +90,6 @@ def prepare_model(model_name: str, weights_path: Path) -> nn.Module:
     Loads and prepares the model for inference.
     """
     model = Models.get_model(model_name)
-    model.eval()
     model.load_state_dict(torch.load(weights_path))
     return model
 
@@ -101,6 +100,7 @@ def get_category_preds(
     """
     Returns category predictions for the given image.
     """
+    model.eval()
     with torch.inference_mode():
         predictions = model(transforms(img).unsqueeze(0))
         class_ids = torch.topk(predictions.squeeze(0).softmax(0), 5).indices
@@ -117,7 +117,8 @@ def load_image(file: UploadFile) -> Image:
     """
     try:
         return Image.open(file.file).convert("RGB")
-    except UnidentifiedImageError:
+    except Exception as e:
+        print(f"Image preprocessing failed with error: {e}")
         raise HTTPException(status_code=422, detail="Supported formats: JPG, PNG.")
 
 
