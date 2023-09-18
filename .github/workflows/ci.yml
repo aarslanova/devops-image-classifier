@@ -7,6 +7,19 @@ jobs:
         steps:
             - name: Get code
               uses: actions/checkout@v4
+            - name: Cache models
+              id: cache-models
+              uses: actions/cache@v3
+              with:
+                path: |
+                  mobilenet_v3_large-5c1a4163.pth
+                  vit_l_16_lc_swag-4d563306.pth
+                key: model-files-${{ runner.os }}
+            - name: Get models
+              if: steps.cache-models.outputs.cache-hit != 'true'
+              run: |
+                curl https://download.pytorch.org/models/mobilenet_v3_large-5c1a4163.pth
+                curl https://download.pytorch.org/models/vit_l_16_lc_swag-4d563306.pth
             - name: Setup QEMU
               uses: docker/setup-qemu-action@v3
             - name: Set up Docker Buildx
@@ -16,3 +29,21 @@ jobs:
               with:
                 username: ${{ secrets.DOCKERHUB_USERNAME }}
                 password: ${{ secrets.DOCKERHUB_TOKEN }}
+            - name: Build Docker image for tests of the fallback
+              uses: docker/build-push-action@v5
+              with:
+                context: .
+                load: true
+                target: fallback_base_test
+                tags: ${{ secrets.DOCKERHUB_USERNAME }}/fallback_base_test:latest
+            - name: Test
+              run: |
+                docker run --rm ${{ secrets.DOCKERHUB_USERNAME }}/fallback_base_test:latest
+            - name: Build and push
+              uses: docker/build-push-action@v5
+              with:
+                context: .
+                platforms: linux/amd64,linux/arm64
+                push: true
+                target: fallback_base
+                tags: ${{ secrets.DOCKERHUB_USERNAME }}/fallback_base:latest
