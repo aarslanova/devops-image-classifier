@@ -16,7 +16,7 @@ COPY mobilenet_v3_large-5c1a4163.pth /app/
 
 EXPOSE 8000
 
-CMD [ "gunicorn", "-k", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8000", "--log-level", "info", "main:app" ]
+CMD [ "gunicorn", "-k", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8000", "--log-level", "info", "--timeout", "180", "main:app" ]
 
 # Tests for fallback
 
@@ -36,7 +36,7 @@ FROM fallback_base AS main_base
 
 COPY wide_resnet50_2-9ba9bcbe.pth /app/
 
-CMD [ "gunicorn", "-k", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8000", "--log-level", "info", "main:app" ]
+CMD [ "gunicorn", "-k", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8000", "--log-level", "info", "--timeout", "180", "main:app" ]
 
 # Tests for main 
 
