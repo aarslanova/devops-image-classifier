@@ -36,9 +36,9 @@ jobs:
                 load: true
                 target: fallback_base_test
                 tags: ${{ secrets.DOCKERHUB_USERNAME }}/fallback_base_test:latest
-            - name: Test
+            - name: Run Docker image for tests of the fallback
               run: |
-                docker run --rm ${{ secrets.DOCKERHUB_USERNAME }}/fallback_base_test:latest
+                docker run --rm -e PYTHONPATH=/app -e MODEL_NAME=mobilenet_v3_large ${{ secrets.DOCKERHUB_USERNAME }}/fallback_base_test:latest
             - name: Build and push
               uses: docker/build-push-action@v5
               with:
