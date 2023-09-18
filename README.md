@@ -26,9 +26,10 @@ Requirements:
 1. `git clone https://github.com/aarslanova/devops-image-classifier.git`
 2. `minikube start --memory=11900 --cpus=5 --driver=docker` to start minikube with necessary memory and cpu
 3. `minikube addons enable ingress` to enable Ingress Controller
-4. `kubectl apply -f k8s/main-deployment.yml -f k8s/main-service.yml -f k8s/fallback-deployment.yml -f k8s/fallback-service.yml -f k8s/main-fallback-ingress.yml` to declaratively specify Kubernetes deployment, service, and ingress controller
-5. `kubectl get svc --all-namespaces | grep ingress` to get services and their namespaces of the ingress controller
-6. `minikube service ingress-nginx-controller -n ingress-nginx --url` to get links of the ingress controller
+4. `kubectl apply -f k8s/main-deployment.yml -f k8s/main-service.yml -f k8s/fallback-deployment.yml -f k8s/fallback-service.yml` to declaratively specify Kubernetes deployment, service
+5. `kubectl wait --namespace ingress-nginx --for=condition=ready pod --selector=app.kubernetes.io/component=controller -timeout=120s` to generate certificates
+6. `kubectl get svc --all-namespaces | grep ingress` to get services and their namespaces of the ingress controller
+7. `minikube service ingress-nginx-controller -n ingress-nginx --url` to get links of the ingress controller
 # Credits
 
 For testing I use several media files:
