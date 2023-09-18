@@ -38,7 +38,7 @@ ModelInfo = namedtuple(
 class Models(Enum):
     """This enum contains implemented models"""
 
-    VIT16 = ModelInfo("wide_resnet", 224, 232, F.InterpolationMode.BILINEAR, False)
+    WIDERESNET = ModelInfo("wide_resnet50_2", 224, 232, F.InterpolationMode.BILINEAR, False)
     MOBILENET = ModelInfo(
         "mobilenet_v3_large", 224, 232, F.InterpolationMode.BILINEAR, True
     )
